@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Odoo
@@ -34,7 +34,10 @@ Required modules:
     'website': 'http://codup.com',
     'category': 'Industries',
     'sequence': 0,
-    'depends': ['asset','purchase'],
+    'depends': [
+        'asset',
+        'purchase'
+    ],
     'demo': ['mro_demo.xml'],
     'data': [
         'security/mro_security.xml',

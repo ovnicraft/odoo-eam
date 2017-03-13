@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Odoo
@@ -7,7 +7,7 @@
 ##############################################################################
 
 import time
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo import netsvc
 import odoo.addons.decimal_precision as dp
 
@@ -133,7 +133,7 @@ class mro_order(models.Model):
                 if any(states) or len(states) == 0: res = False
         return res
 
-    def action_confirm(self):        
+    def action_confirm(self):
         procurement_obj = self.env['procurement.order']
         for order in self:
             proc_ids = []
@@ -301,6 +301,7 @@ class mro_request(models.Model):
     _name = 'mro.request'
     _description = 'Maintenance Request'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _order = 'requested_date ASC'
 
     STATE_SELECTION = [
         ('draft', 'Draft'),
@@ -342,7 +343,7 @@ class mro_request(models.Model):
     def onchange_requested_date(self):
         self.execution_date = self.requested_date
 
-    @api.onchange('execution_date','state','breakdown')
+    @api.onchange('execution_date', 'state', 'breakdown')
     def onchange_execution_date(self):
         if self.state == 'draft' and not self.breakdown:
             self.requested_date = self.execution_date
@@ -359,9 +360,9 @@ class mro_request(models.Model):
         order_id = False
         for request in self:
             order_id = order.create({
-                'date_planned':request.requested_date,
-                'date_scheduled':request.requested_date,
-                'date_execution':request.requested_date,
+                'date_planned': request.requested_date,
+                'date_scheduled': request.requested_date,
+                'date_execution': request.requested_date,
                 'origin': request.name,
                 'state': 'draft',
                 'maintenance_type': 'bm',
@@ -373,21 +374,24 @@ class mro_request(models.Model):
         return order_id.id
 
     def action_done(self):
-        self.write({'state': 'done', 'execution_date': time.strftime('%Y-%m-%d %H:%M:%S')})
+        self.write({'state': 'done',
+                    'execution_date': time.strftime('%Y-%m-%d %H:%M:%S')})
         return True
 
     def action_reject(self):
-        self.write({'state': 'reject', 'execution_date': time.strftime('%Y-%m-%d %H:%M:%S')})
+        self.write({'state': 'reject',
+                    'execution_date': time.strftime('%Y-%m-%d %H:%M:%S')})
         return True
 
     def action_cancel(self):
-        self.write({'state': 'cancel', 'execution_date': time.strftime('%Y-%m-%d %H:%M:%S')})
+        self.write({'state': 'cancel',
+                    'execution_date': time.strftime('%Y-%m-%d %H:%M:%S')})
         return True
 
     @api.model
     def create(self, vals):
-        if vals.get('name','/')=='/':
-            vals['name'] = self.env['ir.sequence'].next_by_code('mro.request') or '/'
+        if vals.get('name', '/') == '/':
+            vals['name'] = self.env['ir.sequence'].next_by_code('mro.request') or '/'  # noqa
         return super(mro_request, self).create(vals)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

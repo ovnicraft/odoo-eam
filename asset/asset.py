@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Odoo
@@ -22,8 +22,9 @@ STATE_COLOR_SELECTION = [
     ('9', 'SkyBlue')
 ]
 
+
 class asset_state(models.Model):
-    """ 
+    """
     Model for asset states.
     """
     _name = 'asset.state'
@@ -45,7 +46,8 @@ class asset_state(models.Model):
 
     def change_color(self):
         color = int(self.state_color) + 1
-        if (color>9): color = 0
+        if (color > 9):
+            color = 0
         return self.write({'state_color': str(color)})
 
 
@@ -82,7 +84,7 @@ class asset_asset(models.Model):
         result = stage_obj.name_get(access_rights_uid, stage_ids)
         # restore order of the search
         result.sort(lambda x,y: cmp(stage_ids.index(x[0]), stage_ids.index(y[0])))
-        return result, {}    
+        return result, {}
 
     def _read_group_finance_state_ids(self, domain, read_group_order=None, access_rights_uid=None):
         return self._read_group_state_ids(domain, read_group_order, access_rights_uid, '0')
